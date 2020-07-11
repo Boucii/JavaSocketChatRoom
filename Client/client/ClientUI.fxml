@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="BasePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.ClientController">
+   <children>
+      <AnchorPane fx:id="Base" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: white; -fx-background-radius: 50; -fx-border-radius: 50;">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#79f7cf" height="558.0" layoutX="-170.0" layoutY="76.0" rotate="156.0" stroke="BLACK" strokeType="INSIDE" width="2000.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#6fb9ff" height="385.0" layoutX="-148.0" layoutY="245.0" rotate="-146.3" stroke="WHITE" strokeType="INSIDE" width="1601.0" />
+            <ListView fx:id="Clients" layoutX="94.0" layoutY="16.0" prefHeight="767.0" prefWidth="353.0" styleClass="UserList" stylesheets="@../../Assets/css/UI.css" />
+            <ListView fx:id="ChatList" layoutX="475.0" layoutY="90.0" prefHeight="547.0" prefWidth="657.0" styleClass="ChatList" stylesheets="@../../Assets/css/UI.css" />
+            <Button fx:id="SendButton" layoutX="1058.0" layoutY="745.0" mnemonicParsing="false" onAction="#Send" prefHeight="39.0" prefWidth="78.0" styleClass="SendButton" stylesheets="@../../Assets/css/UI.css" text="SEND" />
+            <Button fx:id="QuitButton" layoutX="20.0" layoutY="25.0" mnemonicParsing="false" onAction="#Quit" prefHeight="18.0" prefWidth="18.0" styleClass="QuitButton" stylesheets="@../../Assets/css/UI.css">
+               <graphic>
+                  <ImageView fx:id="QuitButton1" fitHeight="40.0" fitWidth="40.0" onMouseEntered="#HoverQuit" onMouseExited="#UnHoverQuit" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../Assets/icons/quit2.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <TextArea fx:id="input" layoutX="475.0" layoutY="658.0" prefHeight="126.0" prefWidth="564.0" styleClass="InputAera" stylesheets="@../../Assets/css/UI.css" />
+            <Button fx:id="LoginButton" layoutX="1047.0" layoutY="25.0" mnemonicParsing="false" onAction="#login" prefHeight="50.0" prefWidth="78.0" styleClass="EmojiButton" stylesheets="@../../Assets/css/UI.css" text="LOGIN" />
+            <TextField fx:id="Account" layoutX="471.0" layoutY="25.0" onAction="#login" prefHeight="50.0" prefWidth="564.0" promptText="EnterNameHere" />
+            <Button layoutX="1056.0" layoutY="658.0" mnemonicParsing="false" onAction="#OpenEmoji" prefHeight="71.0" prefWidth="78.0" style="-fx-font-size: 15;" styleClass="SendButton" stylesheets="@../../Assets/css/UI.css" text="EMOJI" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="emojis" disable="true" prefHeight="138.0" prefWidth="133.0" visible="false" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="500.0">
+         <children>
+            <Button layoutX="94.0" mnemonicParsing="false" onAction="#CloseEmoji" styleClass="SendButton" stylesheets="@../../Assets/css/UI.css" text="Quit" />
+            <ImageView fx:id="shock" fitHeight="59.0" fitWidth="55.0" layoutX="97.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Assets/emojis/confuse.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="confuse" fitHeight="59.0" fitWidth="55.0" layoutX="97.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Assets/emojis/shock.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="happy" fitHeight="59.0" fitWidth="55.0" layoutX="42.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Assets/emojis/happy.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="fat" fitHeight="59.0" fitWidth="55.0" layoutX="42.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Assets/emojis/fat.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,82 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.QuitButton{
+	-fx-background-color:white;
+	-fx-background-radius:20;
+}
+.QuitButton:hover{
+	-fx-background-color:#EEEEEE;
+}
+.EmojiButton{
+	-fx-background-color:white;
+	-fx-background-radius:20;
+	-fx-border-color:#EEEEEE;
+	-fx-border-width:2;
+	-fx-border-radius:20;
+}
+.EmojiButton:hover{
+	-fx-background-color:#EEEEEE;
+}
+.SendButton{
+	-fx-background-color:white;
+	-fx-background-radius:20;
+	-fx-border-color:#EEEEEE;
+	-fx-border-width:2;
+	-fx-border-radius:20;
+	-fx-text-fill:#CCCCCC;	
+	-fx-font-family: "Comic Sans MS Bold";
+	-fx-font-size: 17;
+}
+.SendButton:hover{
+	-fx-background-color:#EEEEEE;
+	-fx-text-fill:#8DB6FF;	
+	-fx-font-family: "Comic Sans MS Bold";
+	-fx-font-size: 17;
+}
+.buttonlist{
+	-fx-opacity:60;
+	-fx-background-color: white;
+	-fx-text-fill:black;	
+	-fx-font-family: "Comic Sans MS Bold";
+	-fx-font-size: 30;
+}
+.kick-client:hover{
+	-fx-background-color: linear-gradient(to top, #756CE5 0%, #6CE5DC 100%); 
+}
+.kick-client:pressed{
+	-fx-background-color: #6CBAE5 ;
+}
+.UserList{		
+	-fx-border-color:#CCCCCC;
+	-fx-border-width:4;
+}
+
+.TextBox{
+	-fx-background-color:white;
+	-fx-background-radius:30;
+	-fx-border-color:#EEEEEE;
+	-fx-border-width:2;
+	-fx-border-radius:30;
+	-fx-text-fill:black;	
+	-fx-font-family: "Comic Sans MS Bold";
+	-fx-font-size: 22;
+}
+.bgp{
+	-fx-background-image:url("../icons/bgp.png");
+	-fx-background-repeat: stretch;   
+    -fx-background-size: 391 250;
+    -fx-background-position: center center;
+}
+.Login{
+	-fx-background-color:white;
+	-fx-background-radius:20;
+	-fx-border-color:#EEEEEE;
+	-fx-border-width:2;
+	-fx-border-radius:20;
+}
+.Login:hover{
+	-fx-background-color:#EEEEEE;
+}
+.InputAera{
+	-fx-font-family: "Comic Sans MS Bold";
+	-fx-font-size: 22;
+}
