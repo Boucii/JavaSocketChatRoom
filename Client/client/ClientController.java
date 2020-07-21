@@ -65,6 +65,8 @@ public class ClientController {
 	private ImageView fat;
 	@FXML
 	private ImageView shock;
+	@FXML
+	private Button EmojiButton;
 	
 	private ClientThread clientThread;
 	public boolean connected=false;
@@ -72,10 +74,12 @@ public class ClientController {
 	static ObservableList<String> clients = FXCollections.observableArrayList();
 	String selected="";//被选中的人
 	public void initialize(){
+		EmojiButton.setDisable(true);
+		SendButton.setDisable(true);
 		Clients.getSelectionModel().selectedItemProperty().addListener(
 				(ObservableValue<? extends String> observable, String oldValue, String newValue) ->{
 					selected=newValue;
-		});//选择了哪一个用户作为聊天对象
+		});
 		class MyEventHandler implements EventHandler<Event>{
 	        @Override
 	        public void handle(Event event) {
@@ -91,7 +95,7 @@ public class ClientController {
 		shock.addEventHandler(MouseEvent.MOUSE_CLICKED, new MyEventHandler());
 		happy.addEventHandler(MouseEvent.MOUSE_CLICKED, new MyEventHandler());
 		confuse.addEventHandler(MouseEvent.MOUSE_CLICKED, new MyEventHandler());
-	} //每一个表情有一个监听器，点击则发送该表情
+	} 
 	public void OpenEmoji() {
 		Base.setDisable(true);
 		emojis.setDisable(false);
@@ -124,7 +128,9 @@ public class ClientController {
 	}
 	public void login() {
 		if (connected==false) {
+			System.out.println("aaaaddsfsdfsd士大夫11");
 			clientThread = new ClientThread();
+			System.out.println("aaaaddsfsdfsd士大夫22");
 			clientThread.start();
 		} else {
 			clientThread.logout();
@@ -138,6 +144,11 @@ public class ClientController {
 		void sendChatMag()
 		{
 			String msgChat="";
+			String ms=input.getText();
+			if(ms.indexOf('#')!=-1) {
+				input.appendText("dont input #");
+				return;
+			}
 			if(selected=="GroupChat"){
 				msgChat="TALKTO_ALL#"+input.getText();
 				addMsg("我说"+input.getText());
@@ -161,6 +172,7 @@ public class ClientController {
 			int n1=emo.indexOf('=');
 			int n2=emo.indexOf(',');
 			emo=emo.substring(n1+1,n2);
+			System.out.println("iii"+emo);
 			String msgChat="";
 			if(selected=="GroupChat"){
 				msgChat="EMOJITO_ALL#"+emo;
@@ -189,33 +201,53 @@ public class ClientController {
 				dos.writeUTF(msgLogout);
 				dos.flush();
 				isLogged=false;
+				connected=false;
 				socket.close();
 				clients.clear();
 				SendButton.setDisable(true);
 				LoginButton.setText("Login");
 				addMsg("已经退出聊天室");
+				EmojiButton.setDisable(true);
+				SendButton.setDisable(true);
+				socket=null;
+				System.out.println("aaaadasf");
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		private void login() throws IOException{
+		private void login() throws IOException{			
+			// 获取服务器IP地址和端口
 			String serverIp = "127.0.0.1";
 			int serverPort = 8000;
+			// 连接服务器，获取套接字IO流
+			System.out.println("aaaaddsfsdfsd士大夫");
 			socket = new Socket(serverIp, serverPort);
 			dis = new DataInputStream(socket.getInputStream());
 			dos = new DataOutputStream(socket.getOutputStream());
+			// 获取用户名，构建、发送登录报文
 			String username = Account.getText();
+			if(username.indexOf('#')!=-1) {
+				Account.appendText("dont input #");
+				return;
+			}
 			String msgLogin = "LOGIN#" + username;
 			dos.writeUTF(msgLogin);
 			dos.flush();
+			// 读取服务器返回的信息，判断是否登录成功
 			String response = dis.readUTF();
+			// 登录失败
 			if(response.equals("FAIL")) {
 				addMsg("登录服务器失败");
+				// 登录失败，断开连接，结束客户端线程
 				socket.close();
 				return;
 			}
+			// 登录成功
 			if(response.equals("SUCCESS")) {
 				addMsg("登录服务器成功");
+				EmojiButton.setDisable(false);
+				SendButton.setDisable(false);
 				clients.add("GroupChat");
 				Platform.runLater(new Runnable() {
 		            @Override
@@ -231,6 +263,7 @@ public class ClientController {
 
 		@Override
 		public void run() {
+			// 连接服务器并登录
 			try {
 				login();
 			} catch (IOException e) {
@@ -243,17 +276,18 @@ public class ClientController {
 					String msg = dis.readUTF();
 					String[] parts = msg.split("#");
 					switch (parts[0]) {
-					// 根据数据包头信息，处理服务器发来的不同报文
+					// 处理服务器发来的用户列表报文
 					case "USERLIST":
 						for(int i = 1; i< parts.length; i++) {
 							addClient(parts[i]);
 						}					
 						break;
+					// 处理服务器发来的新用户登录表报文
 					case "LOGIN":
 						addClient(parts[1]);						
 						break;
 					case "LOGOUT":
-						clients.remove(parts[1]);					
+						deleteClient(parts[1]);
 						break;
 					case "TALKTO_ALL":
 						addMsg(parts[1]+"跟所有人说:"+parts[2]);						
@@ -270,16 +304,19 @@ public class ClientController {
 						addEmo("跟我发送了表情，说"+parts[2]);
 						break;
 					case "KICKED":
-						System.out.println("lcc");
+						LoginButton.setText("Login");
 						logout();
 						break;
 					default:
 						break;
 					}
-				} catch (IOException e) {
+				} catch (Exception e) {
 					// TODO 处理异常
+					System.out.println("dsfsdf666");
 					isLogged = false;
+					connected=false;
 					e.printStackTrace();
+					return;
 				}
 			}
 		}
@@ -316,6 +353,15 @@ public class ClientController {
             @Override
             public void run() {
             	clients.add(name);
+    			Clients.setItems(clients);
+            }
+        });
+	}
+	private void deleteClient(String name) {
+		Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+            	clients.remove(name);
     			Clients.setItems(clients);
             }
         });

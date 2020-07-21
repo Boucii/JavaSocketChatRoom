@@ -28,7 +28,7 @@
             <TextArea fx:id="input" layoutX="475.0" layoutY="658.0" prefHeight="126.0" prefWidth="564.0" styleClass="InputAera" stylesheets="@../../Assets/css/UI.css" />
             <Button fx:id="LoginButton" layoutX="1047.0" layoutY="25.0" mnemonicParsing="false" onAction="#login" prefHeight="50.0" prefWidth="78.0" styleClass="EmojiButton" stylesheets="@../../Assets/css/UI.css" text="LOGIN" />
             <TextField fx:id="Account" layoutX="471.0" layoutY="25.0" onAction="#login" prefHeight="50.0" prefWidth="564.0" promptText="EnterNameHere" />
-            <Button layoutX="1056.0" layoutY="658.0" mnemonicParsing="false" onAction="#OpenEmoji" prefHeight="71.0" prefWidth="78.0" style="-fx-font-size: 15;" styleClass="SendButton" stylesheets="@../../Assets/css/UI.css" text="EMOJI" />
+            <Button fx:id="EmojiButton" layoutX="1056.0" layoutY="658.0" mnemonicParsing="false" onAction="#OpenEmoji" prefHeight="71.0" prefWidth="78.0" style="-fx-font-size: 15;" styleClass="SendButton" stylesheets="@../../Assets/css/UI.css" text="EMOJI" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="emojis" disable="true" prefHeight="138.0" prefWidth="133.0" visible="false" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="500.0">

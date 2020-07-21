@@ -25,7 +25,7 @@
          </graphic>
       </Button>
       <TextArea fx:id="input" layoutX="475.0" layoutY="658.0" prefHeight="126.0" prefWidth="564.0" styleClass="InputArea" stylesheets="@../../Assets/css/UI.css" />
-      <Button layoutX="1058.0" layoutY="671.0" mnemonicParsing="false" onAction="#kick" prefHeight="50.0" prefWidth="78.0" styleClass="EmojiButton" stylesheets="@../../Assets/css/UI.css">
+      <Button fx:id="KickButton" layoutX="1058.0" layoutY="671.0" mnemonicParsing="false" onAction="#kick" prefHeight="50.0" prefWidth="78.0" styleClass="EmojiButton" stylesheets="@../../Assets/css/UI.css">
          <graphic>
             <ImageView fitHeight="34.0" pickOnBounds="true" preserveRatio="true">
                <image>
