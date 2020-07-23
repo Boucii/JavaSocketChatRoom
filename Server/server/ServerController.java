@@ -37,7 +37,7 @@ public class ServerController {
 	@FXML
 	private ListView<Object> ChatList;
 	@FXML
-	public ListView<String> Clients;
+	public ListView<Object> Clients;
 	@FXML
 	private Button KickButton;
 	@FXML
@@ -47,18 +47,22 @@ public class ServerController {
 	private ServerSocket server;
 	private boolean isRunning=false;
 	String selected="";
+	int chosen=0;//头像选到第几个了
 	ObservableList<Object> data = FXCollections.observableArrayList();
-	static ObservableList<String> clients = FXCollections.observableArrayList();
+	static ObservableList<Object> clients = FXCollections.observableArrayList();
 	public HashMap<String, ClientHandler> clientHandlerMap = new HashMap<String, ClientHandler>();
 	public void initialize(){
 		KickButton.setDisable(true);
 		SendButton.setDisable(true);
 		Clients.getSelectionModel().selectedItemProperty().addListener(
-				(ObservableValue<? extends String> observable, String oldValue, String newValue) ->{
-					selected=newValue;
+				(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) ->{
+					HBox temp=(HBox)newValue;
+					Label l=(Label)temp.getChildren().get(1);
+					selected=l.getText();
 		});
 	} 
 	public void kick() {
+		System.out.println(selected);
 		try {
 		ClientHandler temp=clientHandlerMap.get(selected);
 		if (temp!=null) {
@@ -66,8 +70,9 @@ public class ServerController {
 			String msgTalkTo="KICKED#";
 			temp.dos.writeUTF(msgTalkTo);
 			temp.dos.flush();
-			clients.remove(selected);
-			Clients.setItems(clients);
+			//clients.remove(selected);
+			//Clients.setItems(clients);
+			deleteClient(selected);
 			//发送退出信息
 		}}catch(Exception e) {
 			e.printStackTrace();
@@ -138,9 +143,6 @@ public class ServerController {
 	}
 	
 	class ServerThread implements Runnable {	
-		/**
-		 * 启动服务
-		 */
 		private void startServer() {
 			try {
 				// 创建套接字地址
@@ -215,7 +217,7 @@ public class ServerController {
 					case "LOGIN":
 						String loginUsername = parts[1];
 						// 如果该用户名已登录，则返回失败报文，否则返回成功报文
-						if(clientHandlerMap.containsKey(loginUsername)) {
+						if(clientHandlerMap.containsKey(loginUsername)||loginUsername=="GroupChat") {
 							dos.writeUTF("FAIL");
 						} else {
 							
@@ -332,6 +334,7 @@ public class ServerController {
             }
         });
 	}
+	/*
 	private void addClient(String name) {
 		Platform.runLater(new Runnable() {
             @Override
@@ -340,7 +343,7 @@ public class ServerController {
     			Clients.setItems(clients);
             }
         });
-	}
+	}*/
 	private void addEmo(String modified_emo) {
 		int n1=modified_emo.indexOf("说");
 		String pre=modified_emo.substring(0,n1+1);
@@ -358,7 +361,7 @@ public class ServerController {
             }
         });
 	}
-
+    /*
 	private void deleteClient(String name) {
 		Platform.runLater(new Runnable() {
             @Override
@@ -367,6 +370,40 @@ public class ServerController {
     			Clients.setItems(clients);
             }
         });
+	}*/
+	private void addClient(String name) {
+		Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+            	HBox hb=new HBox();
+            	Image im=new Image("file:..\\..\\Assets\\ProfilePto\\"+Integer.toString(chosen)+".png");
+            	chosen=(chosen+1)%6;
+            	ImageView view=new ImageView(im);
+            	view.setFitHeight(40);
+            	view.setFitWidth(40);
+            	view.setPreserveRatio(true);
+            	Label l=new Label(name);
+            	l.setStyle("-fx-font-size: 30;");
+            	hb.getChildren().addAll(view,l);
+            	clients.addAll(hb);
+            	Clients.setItems(clients);
+            }
+        });
 	}
-
+	private void deleteClient(String name) {		
+		Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+            	HBox temp;
+            	for(int i=0;i<clients.size();i++) {
+        			temp=(HBox)clients.get(i);
+        			//if(name==((Label)temp.getChildren().get(1)).getText()) {
+        			if(name.equals(((Label)temp.getChildren().get(1)).getText())) {
+        				clients.remove(temp);
+        				Clients.setItems(clients);
+        			}
+        		}
+            }
+        });
+	}
 }

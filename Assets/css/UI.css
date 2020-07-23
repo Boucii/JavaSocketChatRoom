@@ -49,7 +49,9 @@
 	-fx-border-color:#CCCCCC;
 	-fx-border-width:4;
 }
-
+.UserList .list-cell{		
+	-fx-cell-size: 50;
+}
 .TextBox{
 	-fx-background-color:white;
 	-fx-background-radius:30;

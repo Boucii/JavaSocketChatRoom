@@ -52,7 +52,7 @@ public class ClientController {
 	@FXML
 	private ListView<Object> ChatList;
 	@FXML
-	public ListView<String> Clients;
+	public ListView<Object> Clients;
 	@FXML
 	private Button SendButton;
 	@FXML 
@@ -70,15 +70,18 @@ public class ClientController {
 	
 	private ClientThread clientThread;
 	public boolean connected=false;
+	int chosen=0;
 	ObservableList<Object> data = FXCollections.observableArrayList();
-	static ObservableList<String> clients = FXCollections.observableArrayList();
+	static ObservableList<Object> clients = FXCollections.observableArrayList();
 	String selected="";//被选中的人
 	public void initialize(){
 		EmojiButton.setDisable(true);
 		SendButton.setDisable(true);
 		Clients.getSelectionModel().selectedItemProperty().addListener(
-				(ObservableValue<? extends String> observable, String oldValue, String newValue) ->{
-					selected=newValue;
+				(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) ->{
+					HBox temp=(HBox)newValue;
+					Label l=(Label)temp.getChildren().get(1);
+					selected=l.getText();
 		});
 		class MyEventHandler implements EventHandler<Event>{
 	        @Override
@@ -203,9 +206,15 @@ public class ClientController {
 				isLogged=false;
 				connected=false;
 				socket.close();
-				clients.clear();
+				
 				SendButton.setDisable(true);
-				LoginButton.setText("Login");
+				Platform.runLater(new Runnable() {
+		            @Override
+		            public void run() {
+		            	clients.clear();
+		            	LoginButton.setText("Login");
+		            }
+		        });						
 				addMsg("已经退出聊天室");
 				EmojiButton.setDisable(true);
 				SendButton.setDisable(true);
@@ -248,7 +257,7 @@ public class ClientController {
 				addMsg("登录服务器成功");
 				EmojiButton.setDisable(false);
 				SendButton.setDisable(false);
-				clients.add("GroupChat");
+				addClient("GroupChat");
 				Platform.runLater(new Runnable() {
 		            @Override
 		            public void run() {
@@ -304,7 +313,7 @@ public class ClientController {
 						addEmo("跟我发送了表情，说"+parts[2]);
 						break;
 					case "KICKED":
-						LoginButton.setText("Login");
+						
 						logout();
 						break;
 					default:
@@ -352,17 +361,39 @@ public class ClientController {
 		Platform.runLater(new Runnable() {
             @Override
             public void run() {
-            	clients.add(name);
-    			Clients.setItems(clients);
+            	HBox hb=new HBox();           	
+            	Image im=new Image("file:..\\..\\Assets\\ProfilePto\\"+Integer.toString(chosen)+".png");
+            	chosen=(chosen+1)%6;
+            	if(name=="GroupChat") {
+            		im=new Image("file:..\\..\\Assets\\ProfilePto\\"+Integer.toString(-1)+".png");
+            		chosen=0;
+            	}
+            	ImageView view=new ImageView(im);
+            	view.setFitHeight(40);
+            	view.setFitWidth(40);
+            	view.setPreserveRatio(true);
+            	Label l=new Label(name);
+            	l.setStyle("-fx-font-size: 30;");
+            	hb.getChildren().addAll(view,l);
+            	clients.addAll(hb);
+            	Clients.setItems(clients);
             }
         });
 	}
 	private void deleteClient(String name) {
+		System.out.println(Account.getText()+"   "+name);
 		Platform.runLater(new Runnable() {
             @Override
             public void run() {
-            	clients.remove(name);
-    			Clients.setItems(clients);
+            	HBox temp;
+            	for(int i=0;i<clients.size();i++) {
+        			temp=(HBox)clients.get(i);
+        			String nameTemp=((Label)temp.getChildren().get(1)).getText();
+        			if(name.equals(nameTemp)) {
+        				clients.remove(temp);
+        				Clients.setItems(clients);
+        			}
+        		}
             }
         });
 	}
